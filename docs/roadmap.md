@@ -1,8 +1,8 @@
 # Roadmap
 
-## Current Phase: MVP 0.1 — Data Platform Migration
+## Current Phase: MVP 0.1 - Data Platform Migration
 
-**Active task:** TASK-007 — TqSdk source adapter skeleton (Control Lane).
+**Active task:** TASK-007 - TqSdk source adapter skeleton (Control Lane).
 
 **Completed:**
 
@@ -51,7 +51,7 @@
 ## Principles
 
 - Research and backtest first; **no live trading** in MVP
-- Control Lane: GitHub Issue → Cursor → Review
+- Control Lane: GitHub Issue -> Cursor -> Review
 - `data_store/` real data stays **local**, not in git
 - Credentials via **environment variables only**
 
@@ -62,7 +62,7 @@
 | Doc | Purpose |
 |-----|---------|
 | [legacy_data_platform_review.md](legacy_data_platform_review.md) | TASK-005 legacy assessment |
-| [data_migration_plan.md](data_migration_plan.md) | Stage 0–6 migration plan |
+| [data_migration_plan.md](data_migration_plan.md) | Stage 0-6 migration plan |
 | [data_store_design.md](data_store_design.md) | TASK-006 directory contract |
 | [data_dictionary.md](data_dictionary.md) | Field-level contracts |
 | [tqsdk_data_source_plan.md](tqsdk_data_source_plan.md) | TqSdk adapter plan |

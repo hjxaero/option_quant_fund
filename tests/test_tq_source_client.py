@@ -6,9 +6,12 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from option_quant_fund.data.sources.tq.client import TqClient, is_tqsdk_available
+from option_quant_fund.data.sources.tq.client import (
+    TqClient,
+    TqSdkNotInstalledError,
+    is_tqsdk_available,
+)
 from option_quant_fund.data.sources.tq.config import ENV_TQ_PASS, ENV_TQ_USER, TqConfig
-from option_quant_fund.data.sources.tq.client import TqSdkNotInstalledError
 
 
 def test_tq_package_imports_without_tqsdk_installed():
