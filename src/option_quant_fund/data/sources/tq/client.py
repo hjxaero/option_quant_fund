@@ -1,4 +1,4 @@
-"""Offline-first TqSdk client skeleton."""
+"""TqSdk client wrapper skeleton for TASK-007."""
 
 from __future__ import annotations
 
@@ -8,11 +8,11 @@ from option_quant_fund.data.sources.tq.config import TqConfig
 
 
 class TqSdkNotInstalledError(ImportError):
-    """The optional tqsdk package is not available."""
+    """Raised when connect() is called without the tqsdk package."""
 
 
 def is_tqsdk_available() -> bool:
-    """Return True when tqsdk can be imported."""
+    """Report whether the optional tqsdk dependency is installed."""
     try:
         import tqsdk  # noqa: F401
     except ImportError:
@@ -21,10 +21,9 @@ def is_tqsdk_available() -> bool:
 
 
 class TqClient:
-    """Thin wrapper around future TqSdk usage.
+    """Offline-first TqSdk adapter entry point.
 
-    TASK-007 only defines structure and credential wiring.
-    Download logic arrives in TASK-008.
+    Structure and env-var wiring only. Download code belongs in TASK-008.
     """
 
     def __init__(
@@ -41,8 +40,7 @@ class TqClient:
 
     @classmethod
     def from_env(cls, *, auto_connect: bool = False) -> TqClient:
-        config = TqConfig.from_env()
-        return cls(config, auto_connect=auto_connect)
+        return cls(TqConfig.from_env(), auto_connect=auto_connect)
 
     @property
     def config(self) -> TqConfig:
@@ -53,7 +51,7 @@ class TqClient:
         return self._connected
 
     def connect(self) -> None:
-        """Create a live TqSdk session when explicitly requested."""
+        """Open a TqSdk session only when explicitly requested."""
         if self._connected:
             return
 
@@ -65,11 +63,11 @@ class TqClient:
         from tqsdk import TqApi
         from tqsdk import TqAuth
 
-        auth = TqAuth(
+        credentials = TqAuth(
             self._config.user,
             self._config.password,
         )
-        self._api = TqApi(auth=auth)
+        self._api = TqApi(auth=credentials)
         self._connected = True
 
     def close(self) -> None:

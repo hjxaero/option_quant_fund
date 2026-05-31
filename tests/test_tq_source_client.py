@@ -1,4 +1,4 @@
-"""Unit tests for TqSdk client skeleton."""
+"""Offline tests for TqSdk client skeleton."""
 
 import sys
 from types import ModuleType
@@ -14,14 +14,14 @@ from option_quant_fund.data.sources.tq.config import ENV_TQ_USER
 from option_quant_fund.data.sources.tq.config import TqConfig
 
 
-def test_sources_tq_package_exports():
+def test_tq_subpackage_exports():
     from option_quant_fund.data.sources import tq
 
     assert hasattr(tq, "TqClient")
     assert hasattr(tq, "TqConfig")
 
 
-def test_from_env_client_stays_offline(monkeypatch):
+def test_new_client_is_offline_by_default(monkeypatch):
     monkeypatch.setenv(ENV_TQ_USER, "fake_user")
     monkeypatch.setenv(ENV_TQ_PASS, "fake_pass")
 
@@ -31,7 +31,7 @@ def test_from_env_client_stays_offline(monkeypatch):
     assert client.config.user == "fake_user"
 
 
-def test_connect_requires_installed_tqsdk(monkeypatch):
+def test_connect_errors_when_tqsdk_missing(monkeypatch):
     monkeypatch.setenv(ENV_TQ_USER, "fake_user")
     monkeypatch.setenv(ENV_TQ_PASS, "fake_pass")
     monkeypatch.setitem(sys.modules, "tqsdk", None)
@@ -42,49 +42,49 @@ def test_connect_requires_installed_tqsdk(monkeypatch):
         client.connect()
 
 
-def test_connect_with_mocked_tqsdk_module(monkeypatch):
+def test_connect_builds_session_with_mock_module(monkeypatch):
     monkeypatch.setenv(ENV_TQ_USER, "fake_user")
     monkeypatch.setenv(ENV_TQ_PASS, "fake_pass")
 
-    mock_api = MagicMock()
-    mock_auth = MagicMock()
-    fake_module = ModuleType("tqsdk")
-    fake_module.TqApi = MagicMock(return_value=mock_api)
-    fake_module.TqAuth = mock_auth
-    monkeypatch.setitem(sys.modules, "tqsdk", fake_module)
+    api = MagicMock()
+    auth_ctor = MagicMock()
+    stub = ModuleType("tqsdk")
+    stub.TqApi = MagicMock(return_value=api)
+    stub.TqAuth = auth_ctor
+    monkeypatch.setitem(sys.modules, "tqsdk", stub)
 
     client = TqClient.from_env()
     client.connect()
 
-    mock_auth.assert_called_once_with("fake_user", "fake_pass")
-    fake_module.TqApi.assert_called_once()
+    auth_ctor.assert_called_once_with("fake_user", "fake_pass")
+    stub.TqApi.assert_called_once()
     assert client.is_connected is True
 
     client.close()
-    mock_api.close.assert_called_once()
+    api.close.assert_called_once()
     assert client.is_connected is False
 
 
-def test_context_manager_closes_session(monkeypatch):
+def test_client_context_manager_closes_api(monkeypatch):
     monkeypatch.setenv(ENV_TQ_USER, "fake_user")
     monkeypatch.setenv(ENV_TQ_PASS, "fake_pass")
 
-    mock_api = MagicMock()
-    fake_module = ModuleType("tqsdk")
-    fake_module.TqApi = MagicMock(return_value=mock_api)
-    fake_module.TqAuth = MagicMock()
-    monkeypatch.setitem(sys.modules, "tqsdk", fake_module)
+    api = MagicMock()
+    stub = ModuleType("tqsdk")
+    stub.TqApi = MagicMock(return_value=api)
+    stub.TqAuth = MagicMock()
+    monkeypatch.setitem(sys.modules, "tqsdk", stub)
 
-    config = TqConfig.from_env()
-    with TqClient(config, auto_connect=True) as client:
+    cfg = TqConfig.from_env()
+    with TqClient(cfg, auto_connect=True) as client:
         assert client.is_connected is True
 
-    mock_api.close.assert_called_once()
+    api.close.assert_called_once()
 
 
 @pytest.mark.skipif(
     is_tqsdk_available(),
-    reason="only run when tqsdk is absent",
+    reason="requires tqsdk to be absent",
 )
-def test_is_tqsdk_available_false_without_package():
+def test_is_tqsdk_available_reports_false():
     assert is_tqsdk_available() is False

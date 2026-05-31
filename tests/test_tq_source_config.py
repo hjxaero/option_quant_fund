@@ -1,4 +1,4 @@
-"""Unit tests for TqSdk configuration skeleton."""
+"""Offline tests for TqSdk configuration helpers."""
 
 import pytest
 
@@ -9,29 +9,29 @@ from option_quant_fund.data.sources.tq.config import TqConfigError
 from option_quant_fund.data.sources.tq.config import check_env
 
 
-def test_check_env_missing_when_vars_absent(monkeypatch):
+def test_check_env_flags_missing_variables(monkeypatch):
     monkeypatch.delenv(ENV_TQ_USER, raising=False)
     monkeypatch.delenv(ENV_TQ_PASS, raising=False)
 
-    status = check_env()
+    result = check_env()
 
-    assert status.user_present is False
-    assert status.password_present is False
-    assert status.complete is False
-    assert status.missing == (ENV_TQ_USER, ENV_TQ_PASS)
+    assert result.user_present is False
+    assert result.password_present is False
+    assert result.complete is False
+    assert result.missing == (ENV_TQ_USER, ENV_TQ_PASS)
 
 
-def test_check_env_complete_with_fake_vars(monkeypatch):
+def test_check_env_flags_present_variables(monkeypatch):
     monkeypatch.setenv(ENV_TQ_USER, "fake_user")
     monkeypatch.setenv(ENV_TQ_PASS, "fake_pass")
 
-    status = check_env()
+    result = check_env()
 
-    assert status.complete is True
-    assert status.missing == ()
+    assert result.complete is True
+    assert result.missing == ()
 
 
-def test_from_env_error_when_vars_missing(monkeypatch):
+def test_from_env_raises_without_credentials(monkeypatch):
     monkeypatch.delenv(ENV_TQ_USER, raising=False)
     monkeypatch.delenv(ENV_TQ_PASS, raising=False)
 
@@ -42,7 +42,7 @@ def test_from_env_error_when_vars_missing(monkeypatch):
         TqConfig.from_env()
 
 
-def test_from_env_error_when_password_missing(monkeypatch):
+def test_from_env_raises_without_password(monkeypatch):
     monkeypatch.setenv(ENV_TQ_USER, "fake_user")
     monkeypatch.delenv(ENV_TQ_PASS, raising=False)
 
@@ -50,7 +50,7 @@ def test_from_env_error_when_password_missing(monkeypatch):
         TqConfig.from_env()
 
 
-def test_from_env_reads_fake_vars(monkeypatch):
+def test_from_env_builds_config_from_fake_vars(monkeypatch):
     monkeypatch.setenv(ENV_TQ_USER, "fake_user")
     monkeypatch.setenv(ENV_TQ_PASS, "fake_pass")
 
@@ -60,19 +60,19 @@ def test_from_env_reads_fake_vars(monkeypatch):
     assert config.password == "fake_pass"
 
 
-def test_from_env_accepts_custom_environ_dict():
-    custom = {
+def test_from_env_reads_passed_mapping():
+    mapping = {
         ENV_TQ_USER: "scoped_user",
         ENV_TQ_PASS: "scoped_pass",
     }
 
-    config = TqConfig.from_env(environ=custom)
+    config = TqConfig.from_env(environ=mapping)
 
     assert config.user == "scoped_user"
     assert config.password == "scoped_pass"
 
 
-def test_from_env_rejects_blank_username(monkeypatch):
+def test_from_env_rejects_empty_user(monkeypatch):
     monkeypatch.setenv(ENV_TQ_USER, "")
     monkeypatch.setenv(ENV_TQ_PASS, "fake_pass")
 
