@@ -1,4 +1,4 @@
-"""TqSdk client skeleton — no live connection by default."""
+"""TqSdk client skeleton - no live connection by default."""
 
 from __future__ import annotations
 

@@ -24,18 +24,11 @@
 | TASK-005 | Legacy review; initial store design docs | No | Done |
 | TASK-006 | Formal `data_store` layout + field contracts + `.gitignore` | No | Done |
 | **TASK-007** | TqSdk source adapter skeleton (offline tests; env-var auth) | No | **Current** |
-| **TASK-008** | Single-contract MO minute quote download MVP | Yes (minimal) | Next |
+| **TASK-008** | Single-contract MO minute quote download MVP | Yes (minimal) | **Next** |
 | TASK-009 | First real MO sample batch + quality report | Yes | Planned |
 | TASK-010 | Re-review schema & option_chain on real samples | Yes | Planned |
 
-### TASK-007 (current)
-
-- `src/option_quant_fund/data/sources/tq/` config + client skeleton
-- Credentials from `TQ_USER` / `TQ_PASS` environment variables only
-- Offline unit tests with monkeypatch / mocked tqsdk
-- **No** live TqSdk calls in default `pytest`
-
-### TASK-008 preview
+### TASK-008 (next)
 
 - First parquet under `data_store/quotes/minute/MO/{symbol}/{trade_date}.parquet`
 - Atomic write + `.state.json` sidecar
@@ -72,4 +65,4 @@
 | [data_migration_plan.md](data_migration_plan.md) | Stage 0–6 migration plan |
 | [data_store_design.md](data_store_design.md) | TASK-006 directory contract |
 | [data_dictionary.md](data_dictionary.md) | Field-level contracts |
-| [tqsdk_data_source_plan.md](tqsdk_data_source_plan.md) | TqSdk plan (skeleton in TASK-007) |
+| [tqsdk_data_source_plan.md](tqsdk_data_source_plan.md) | TqSdk adapter plan |
