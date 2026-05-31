@@ -1,16 +1,30 @@
-# Real historical data (parquet) — do not commit
+# Market data — never commit real/large assets
+
 data_store/*
 !data_store/.gitkeep
 
-# Staging / processed / external data
 data/raw/*
-data/processed/*
-data/external/*
 !data/raw/.gitkeep
+
+data/processed/*
 !data/processed/.gitkeep
+
+data/external/*
 !data/external/.gitkeep
 
+# data/sample/ is intentionally NOT ignored (CI fixtures)
+
+# Secrets — never commit
+
+.env
+.env.*
+*.pem
+credentials.json
+secrets/
+**/secrets/
+
 # Python
+
 __pycache__/
 *.py[cod]
 .pytest_cache/
@@ -19,12 +33,7 @@ __pycache__/
 venv/
 
 # OS / IDE
+
 .DS_Store
 .idea/
 .vscode/
-
-# Secrets — never commit
-.env
-.env.*
-*.pem
-credentials.json
