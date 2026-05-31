@@ -1,32 +1,21 @@
-# =============================================================================
 # Market data — never commit real/large assets
-# =============================================================================
 
-# data_store: all real historical parquet/json (keep directory placeholder only)
 data_store/*
 !data_store/.gitkeep
 
-# Explicit block for common data file types under data_store (defense in depth)
-data_store/**/*.parquet
-data_store/**/*.parquet.tmp
-data_store/**/*.feather
-data_store/**/*.csv
-data_store/**/*.json
-!data_store/.gitkeep
-
-# data/ staging layers — contents gitignored, .gitkeep tracked
 data/raw/*
 !data/raw/.gitkeep
+
 data/processed/*
 !data/processed/.gitkeep
+
 data/external/*
 !data/external/.gitkeep
 
-# Do NOT ignore data/sample/ — small simulated CSV fixtures for CI
+# data/sample/ is intentionally NOT ignored (CI fixtures)
 
-# =============================================================================
 # Secrets — never commit
-# =============================================================================
+
 .env
 .env.*
 *.pem
@@ -34,9 +23,8 @@ credentials.json
 secrets/
 **/secrets/
 
-# =============================================================================
 # Python
-# =============================================================================
+
 __pycache__/
 *.py[cod]
 .pytest_cache/
@@ -44,9 +32,8 @@ __pycache__/
 .venv/
 venv/
 
-# =============================================================================
 # OS / IDE
-# =============================================================================
+
 .DS_Store
 .idea/
 .vscode/
