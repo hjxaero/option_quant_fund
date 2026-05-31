@@ -1,0 +1,3 @@
+timestamp,underlying_symbol,last_price,bid_price,ask_price,volume
+2025-01-02 09:31:00,IM,5100.0,5099.5,5100.5,12000
+2025-01-02 09:32:00,IM,5110.0,5109.5,5110.5,13500
