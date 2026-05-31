@@ -1,78 +1,145 @@
 # Data Dictionary
 
-> **MVP 0.1 minimal schema** — simulated sample data only.  
-> This is **not** the final production exchange format.
+> **MVP 0.1** — includes TASK-002 sample schemas **and** candidate fields for future real MO minute data.  
+> Sample CSV is **not** the final production format. Real data will use parquet under `data_store/`.
 
-All timestamps use ISO-like strings in CSV (`YYYY-MM-DD HH:MM:SS`) and are parsed to `datetime64` on load.  
-No real account data, API keys, or live market feeds are included.
+No real account data, API keys, or live feeds are stored in this repository.
 
 ---
 
-## Option Quote Schema
+## Part A — MVP Sample Schemas (TASK-002, current)
 
-File example: `data/sample/option_quotes_sample.csv`
+### Option Quote CSV (sample)
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `timestamp` | datetime | Yes | Quote time, e.g. `2025-01-02 09:31:00` |
-| `underlying_symbol` | string | Yes | Underlying ticker, e.g. `IM` |
-| `option_symbol` | string | Yes | Option contract code, e.g. `IM2501-C-5000` |
-| `expiry` | date | Yes | Expiration date, `YYYY-MM-DD` |
+File: `data/sample/option_quotes_sample.csv`
+
+| Field | Type | Required now | Description |
+|-------|------|--------------|-------------|
+| `timestamp` | datetime | Yes | Quote time |
+| `underlying_symbol` | string | Yes | Underlying ticker (sample: `IM`) |
+| `option_symbol` | string | Yes | Option contract code |
+| `expiry` | date | Yes | Expiration date |
 | `strike` | float | Yes | Strike price |
-| `option_type` | string | Yes | `C` (call) or `P` (put) |
+| `option_type` | string | Yes | `C` or `P` |
 | `bid_price` | float | Yes | Best bid |
 | `ask_price` | float | Yes | Best ask |
 | `last_price` | float | Yes | Last traded price |
 | `volume` | int | Yes | Session volume |
 | `open_interest` | int | Yes | Open interest |
-| `underlying_price` | float | Yes | Underlying reference price at quote time |
+| `underlying_price` | float | Yes | Underlying reference price |
 
-### Data quality rules (MVP 0.1)
+### Underlying Quote CSV (sample)
 
-- `option_type` must be exactly `C` or `P`.
-- `bid_price` must be less than `ask_price`.
-- `strike`, prices, and `underlying_price` must be numeric.
-- `volume` and `open_interest` must be integers ≥ 0 in sample data.
-- Missing required columns cause `ValueError` in the loader.
+File: `data/sample/underlying_quotes_sample.csv`
 
----
-
-## Underlying Quote Schema
-
-File example: `data/sample/underlying_quotes_sample.csv`
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `timestamp` | datetime | Yes | Quote time, e.g. `2025-01-02 09:31:00` |
-| `underlying_symbol` | string | Yes | Underlying ticker, e.g. `IM` |
+| Field | Type | Required now | Description |
+|-------|------|--------------|-------------|
+| `timestamp` | datetime | Yes | Quote time |
+| `underlying_symbol` | string | Yes | Underlying ticker |
 | `last_price` | float | Yes | Last traded price |
 | `bid_price` | float | Yes | Best bid |
 | `ask_price` | float | Yes | Best ask |
 | `volume` | int | Yes | Session volume |
 
-### Data quality rules (MVP 0.1)
+### Sample quality rules
 
-- `bid_price` must be less than `ask_price`.
-- Price fields must be numeric; `volume` must be integer.
-- Missing required columns cause `ValueError` in the loader.
+- `option_type` ∈ {`C`, `P`}; `bid_price` < `ask_price`
+- Missing columns → `ValueError` in loader
 
 ---
 
-## Loader API
+## Part B — MO Minute Quote Candidates (future, parquet)
+
+Target path: `data_store/quotes/minute/MO/{symbol}/{trade_date}.parquet`  
+Aligned from TqSdk ticks (see legacy `Option_System_Research` data platform).
+
+| Field | Type | Required now | Required future | Description |
+|-------|------|--------------|-----------------|-------------|
+| `target_time` | datetime | No | Yes | Standard minute slot (MO session grid) |
+| `quote_time` | datetime | No | Yes | Source tick timestamp used for alignment |
+| `quote_age_ms` | int | No | Yes | `target_time - quote_time` in ms |
+| `symbol` | string | No | Yes | Full contract code (e.g. `CFFEX.MO2601-C-6000`) |
+| `underlying_symbol` | string | No | Yes | Underlying / index reference |
+| `expiry_date` | date | No | Yes | Contract expiration |
+| `strike_price` | float | No | Yes | Strike |
+| `option_type` | string | No | Yes | `call` / `put` or `C` / `P` (normalize in TASK-006) |
+| `bid_price1` | float | No | Yes | Best bid (level 1) |
+| `ask_price1` | float | No | Yes | Best ask (level 1) |
+| `bid_volume1` | int | No | Yes | Bid size |
+| `ask_volume1` | int | No | Yes | Ask size |
+| `last_price` | float | No | Optional | Last trade — not primary IV input |
+| `volume` | int | No | Optional | Session volume |
+| `open_interest` | int | No | Optional | Open interest |
+| `mid_price` | float | No | Yes | (bid + ask) / 2 when valid |
+| `micro_price` | float | No | Yes | Volume-weighted micro price |
+| `spread_bps` | float | No | Yes | Bid-ask spread in bps |
+| `price_source` | string | No | Yes | `micro`, `mid`, `last_inside_spread`, `last`, `none` |
+| `quote_quality` | string | No | Yes | e.g. `ok`, `stale_quote`, `wide_spread`, `no_price` |
+
+**Design rule (from legacy):** prefer order book over last price for future mark/IV inputs.
+
+---
+
+## Part C — Contract Metadata Candidates (future)
+
+Target path: `data_store/contracts/MO/{trade_date}.parquet`
+
+| Field | Type | Required now | Required future | Description |
+|-------|------|--------------|-----------------|-------------|
+| `symbol` | string | No | Yes | Option contract code |
+| `underlying_symbol` | string | No | Yes | Underlying |
+| `expiry_date` | date | No | Yes | Expiration |
+| `strike_price` | float | No | Yes | Strike |
+| `option_type` | string | No | Yes | Call / put |
+| `term_role` | string | No | Yes | `current_month`, `next_month`, `current_quarter`, `next_quarter` |
+| `contract_multiplier` | float | No | Yes | Contract size |
+| `tick_size` | float | No | Yes | Minimum price increment |
+| `list_date` | date | No | Optional | Listing date |
+| `last_trade_date` | date | No | Optional | Last trading day |
+
+Supporting cache (future): `data_store/contracts/MO/first_valid_dates.json` — first day with usable quotes per symbol.
+
+---
+
+## Part D — Four-Term Snapshot Candidates (future)
+
+Target path: `data_store/snapshots/four_term/MO/{trade_date}.parquet`
+
+Extends minute quote fields with chain context:
+
+| Field | Type | Required now | Required future | Description |
+|-------|------|--------------|-----------------|-------------|
+| `timestamp` | datetime | No | Yes | Standard minute (alias of `target_time`) |
+| `term_role` | string | No | Yes | Four-term role |
+| `futures_symbol` | string | No | Optional | Pricing forward instrument |
+| `futures_price` | float | No | Optional | Forward/futures input for IV |
+| `mark_price` | float | No | Future | Price used for IV/Greeks |
+| `iv` | float | No | Deferred | Implied vol — **not in TASK-005~010 data tasks** |
+| `iv_quality` | string | No | Deferred | IV quality tag |
+| `iv_method` | string | No | Deferred | `calc`, `interp`, `none` |
+
+Snapshot rows inherit bid/ask/micro/mid/quality fields from Part B.
+
+---
+
+## Loader API (current)
 
 | Function | Input | Output |
 |----------|-------|--------|
-| `load_option_quotes(path)` | Option quote CSV path | `pandas.DataFrame` with typed columns |
-| `load_underlying_quotes(path)` | Underlying quote CSV path | `pandas.DataFrame` with typed columns |
+| `load_option_quotes(path)` | Sample CSV path | DataFrame (Part A columns) |
+| `load_underlying_quotes(path)` | Sample CSV path | DataFrame (Part A columns) |
 
-Loaders perform column presence checks and basic type coercion only. They do **not** compute Greeks, build option chains, or run backtests.
+Future loaders for parquet (TASK-006+) will be documented here when implemented.
 
 ---
 
-## Out of scope (TASK-002)
+## Schema Evolution Notes
 
-- Live exchange feeds, tick/Level-2 data, databases
-- Data cleaning pipelines beyond type coercion
-- Production-grade field coverage
+| Topic | Decision |
+|-------|----------|
+| Sample vs production | Sample CSV stays for CI; production uses parquet |
+| Greeks / IV fields | Documented as future; **not implemented** in data migration Phase 1 |
+| Field naming | Production parquet uses snake_case English (legacy convention) |
+| Re-review gate | TASK-010 validates schema against first real MO samples |
 
-Future tasks may extend this dictionary for processed datasets and chain-ready views.
+See also: [data_store_design.md](data_store_design.md), [data_migration_plan.md](data_migration_plan.md).
