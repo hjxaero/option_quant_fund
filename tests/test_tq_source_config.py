@@ -2,13 +2,11 @@
 
 import pytest
 
-from option_quant_fund.data.sources.tq.config import (
-    ENV_TQ_PASS,
-    ENV_TQ_USER,
-    TqConfig,
-    TqConfigError,
-    check_env,
-)
+from option_quant_fund.data.sources.tq.config import ENV_TQ_PASS
+from option_quant_fund.data.sources.tq.config import ENV_TQ_USER
+from option_quant_fund.data.sources.tq.config import TqConfig
+from option_quant_fund.data.sources.tq.config import TqConfigError
+from option_quant_fund.data.sources.tq.config import check_env
 
 
 def test_check_env_reports_missing_by_default(monkeypatch):
@@ -37,7 +35,10 @@ def test_from_env_raises_when_credentials_missing(monkeypatch):
     monkeypatch.delenv(ENV_TQ_USER, raising=False)
     monkeypatch.delenv(ENV_TQ_PASS, raising=False)
 
-    with pytest.raises(TqConfigError, match="Missing required TqSdk environment variable"):
+    with pytest.raises(
+        TqConfigError,
+        match="Missing required TqSdk environment variable",
+    ):
         TqConfig.from_env()
 
 
@@ -60,7 +61,10 @@ def test_from_env_loads_fake_credentials(monkeypatch):
 
 
 def test_from_env_uses_custom_environ_without_global_env():
-    fake_env = {ENV_TQ_USER: "scoped_user", ENV_TQ_PASS: "scoped_pass"}
+    fake_env = {
+        ENV_TQ_USER: "scoped_user",
+        ENV_TQ_PASS: "scoped_pass",
+    }
 
     config = TqConfig.from_env(environ=fake_env)
 

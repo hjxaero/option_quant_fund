@@ -49,12 +49,15 @@ class TqConfig:
         pass_var: str = ENV_TQ_PASS,
         environ: dict[str, str] | None = None,
     ) -> TqConfig:
-        status = check_env(user_var=user_var, pass_var=pass_var, environ=environ)
+        status = check_env(
+            user_var=user_var,
+            pass_var=pass_var,
+            environ=environ,
+        )
         if not status.complete:
             missing = ", ".join(status.missing)
-            raise TqConfigError(
-                f"Missing required TqSdk environment variable(s): {missing}"
-            )
+            message = f"Missing required TqSdk environment variable(s): {missing}"
+            raise TqConfigError(message)
 
         env = os.environ if environ is None else environ
         return cls(user=env[user_var], password=env[pass_var])

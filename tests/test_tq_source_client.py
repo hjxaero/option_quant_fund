@@ -6,12 +6,12 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from option_quant_fund.data.sources.tq.client import (
-    TqClient,
-    TqSdkNotInstalledError,
-    is_tqsdk_available,
-)
-from option_quant_fund.data.sources.tq.config import ENV_TQ_PASS, ENV_TQ_USER, TqConfig
+from option_quant_fund.data.sources.tq.client import TqClient
+from option_quant_fund.data.sources.tq.client import TqSdkNotInstalledError
+from option_quant_fund.data.sources.tq.client import is_tqsdk_available
+from option_quant_fund.data.sources.tq.config import ENV_TQ_PASS
+from option_quant_fund.data.sources.tq.config import ENV_TQ_USER
+from option_quant_fund.data.sources.tq.config import TqConfig
 
 
 def test_tq_package_imports_without_tqsdk_installed():
@@ -82,6 +82,9 @@ def test_context_manager_closes_client(monkeypatch):
     mock_api.close.assert_called_once()
 
 
-@pytest.mark.skipif(is_tqsdk_available(), reason="offline test only when tqsdk absent")
+@pytest.mark.skipif(
+    is_tqsdk_available(),
+    reason="offline test only when tqsdk absent",
+)
 def test_is_tqsdk_available_false_when_not_installed():
     assert is_tqsdk_available() is False

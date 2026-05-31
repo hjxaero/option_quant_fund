@@ -52,13 +52,16 @@ class TqClient:
             return
 
         if not is_tqsdk_available():
-            raise TqSdkNotInstalledError(
+            message = (
                 "tqsdk is not installed; install it locally before calling connect()"
             )
+            raise TqSdkNotInstalledError(message)
 
-        from tqsdk import TqApi, TqAuth
+        from tqsdk import TqApi
+        from tqsdk import TqAuth
 
-        self._api = TqApi(auth=TqAuth(self._config.user, self._config.password))
+        auth = TqAuth(self._config.user, self._config.password)
+        self._api = TqApi(auth=auth)
         self._connected = True
 
     def close(self) -> None:
