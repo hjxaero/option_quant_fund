@@ -2,7 +2,7 @@
 
 ## Current Phase: MVP 0.1
 
-**Active task:** TASK-001 — Create initial project skeleton and module boundaries.
+**Active task:** TASK-004 — Minimal option chain builder (Control Lane).
 
 ## Planned (high level)
 
@@ -10,8 +10,9 @@
 |------|--------|
 | TASK-001 | Project skeleton, package layout, minimal tests |
 | TASK-002 | Data dictionary and sample data conventions |
-| TASK-004 | Black-Scholes Greeks (in `greeks` module) |
-| Later | Option chain builder, backtest engine, risk rules |
+| TASK-003 | Fast Lane option chain prototype (experiments/) |
+| TASK-004 | Formal option chain builder (`option_chain` module) |
+| Later | Black-Scholes Greeks, backtest engine, risk rules |
 
 ## Principles
 

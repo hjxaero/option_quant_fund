@@ -22,15 +22,16 @@ Does **not** handle: Greeks, strategy signals, backtest, live trading.
 
 ### `option_chain`
 
-- Option chain construction interface placeholders
-- Expiry, strike, Call/Put structure placeholders
+- Formal minimal option chain builder (`build_option_chain`, `summarize_option_chain`)
+- Promoted from Fast Lane prototype (`experiments/option_chain_prototype/`) in TASK-004
+- Groups quotes by expiry, sorts strikes, separates Call/Put legs
 
-Does **not** handle: Greeks, trading signals, backtest, execution.
+Does **not** handle: Greeks, IV, trading signals, backtest, execution.
 
 ### `greeks`
 
 - Greeks calculation interface placeholders
-- Black-Scholes implementation deferred to TASK-004
+- Black-Scholes implementation deferred to a later task
 
 Does **not** handle: risk limits, auto-hedging, trading decisions.
 
