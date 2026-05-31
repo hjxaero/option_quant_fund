@@ -1,4 +1,4 @@
-"""TqSdk configuration loaded from environment variables only."""
+"""Environment-based configuration for the TqSdk adapter skeleton."""
 
 from __future__ import annotations
 
@@ -10,12 +10,12 @@ ENV_TQ_PASS = "TQ_PASS"
 
 
 class TqConfigError(ValueError):
-    """Raised when required TqSdk environment variables are missing or empty."""
+    """Configuration is incomplete or invalid."""
 
 
 @dataclass(frozen=True)
 class TqEnvStatus:
-    """Explicit readiness state for TqSdk credentials in the environment."""
+    """Reports which credential environment variables are available."""
 
     user_present: bool
     password_present: bool
@@ -26,17 +26,17 @@ class TqEnvStatus:
 
     @property
     def missing(self) -> tuple[str, ...]:
-        missing: list[str] = []
+        names: list[str] = []
         if not self.user_present:
-            missing.append(ENV_TQ_USER)
+            names.append(ENV_TQ_USER)
         if not self.password_present:
-            missing.append(ENV_TQ_PASS)
-        return tuple(missing)
+            names.append(ENV_TQ_PASS)
+        return tuple(names)
 
 
 @dataclass(frozen=True)
 class TqConfig:
-    """TqSdk credentials resolved from environment variable names only."""
+    """Resolved TqSdk credentials."""
 
     user: str
     password: str
@@ -55,12 +55,17 @@ class TqConfig:
             environ=environ,
         )
         if not status.complete:
-            missing = ", ".join(status.missing)
-            message = f"Missing required TqSdk environment variable(s): {missing}"
-            raise TqConfigError(message)
+            joined = ", ".join(status.missing)
+            raise TqConfigError(
+                "Missing required TqSdk environment variable(s): "
+                + joined
+            )
 
-        env = os.environ if environ is None else environ
-        return cls(user=env[user_var], password=env[pass_var])
+        source = os.environ if environ is None else environ
+        return cls(
+            user=source[user_var],
+            password=source[pass_var],
+        )
 
 
 def check_env(
@@ -69,11 +74,11 @@ def check_env(
     pass_var: str = ENV_TQ_PASS,
     environ: dict[str, str] | None = None,
 ) -> TqEnvStatus:
-    """Return whether TqSdk credential environment variables are present."""
-    env = os.environ if environ is None else environ
-    user = env.get(user_var)
-    password = env.get(pass_var)
+    """Inspect credential variables without connecting to TqSdk."""
+    source = os.environ if environ is None else environ
+    username = source.get(user_var)
+    password = source.get(pass_var)
     return TqEnvStatus(
-        user_present=bool(user),
+        user_present=bool(username),
         password_present=bool(password),
     )

@@ -1,4 +1,4 @@
-"""TqSdk client skeleton - no live connection by default."""
+"""Offline-first TqSdk client skeleton."""
 
 from __future__ import annotations
 
@@ -8,11 +8,11 @@ from option_quant_fund.data.sources.tq.config import TqConfig
 
 
 class TqSdkNotInstalledError(ImportError):
-    """Raised when live connection is requested but tqsdk is not installed."""
+    """The optional tqsdk package is not available."""
 
 
 def is_tqsdk_available() -> bool:
-    """Return True when the optional tqsdk package is importable."""
+    """Return True when tqsdk can be imported."""
     try:
         import tqsdk  # noqa: F401
     except ImportError:
@@ -21,13 +21,18 @@ def is_tqsdk_available() -> bool:
 
 
 class TqClient:
-    """Skeleton adapter for Tianqin TqSdk.
+    """Thin wrapper around future TqSdk usage.
 
-    TASK-007 provides structure and env-var auth only. Downloader logic and
-    live market-data calls belong in TASK-008+.
+    TASK-007 only defines structure and credential wiring.
+    Download logic arrives in TASK-008.
     """
 
-    def __init__(self, config: TqConfig, *, auto_connect: bool = False) -> None:
+    def __init__(
+        self,
+        config: TqConfig,
+        *,
+        auto_connect: bool = False,
+    ) -> None:
         self._config = config
         self._api: Any | None = None
         self._connected = False
@@ -36,7 +41,8 @@ class TqClient:
 
     @classmethod
     def from_env(cls, *, auto_connect: bool = False) -> TqClient:
-        return cls(TqConfig.from_env(), auto_connect=auto_connect)
+        config = TqConfig.from_env()
+        return cls(config, auto_connect=auto_connect)
 
     @property
     def config(self) -> TqConfig:
@@ -47,20 +53,22 @@ class TqClient:
         return self._connected
 
     def connect(self) -> None:
-        """Open a live TqSdk session. Requires optional tqsdk dependency."""
+        """Create a live TqSdk session when explicitly requested."""
         if self._connected:
             return
 
         if not is_tqsdk_available():
-            message = (
-                "tqsdk is not installed; install it locally before calling connect()"
+            raise TqSdkNotInstalledError(
+                "tqsdk is not installed; install it locally before connect()"
             )
-            raise TqSdkNotInstalledError(message)
 
         from tqsdk import TqApi
         from tqsdk import TqAuth
 
-        auth = TqAuth(self._config.user, self._config.password)
+        auth = TqAuth(
+            self._config.user,
+            self._config.password,
+        )
         self._api = TqApi(auth=auth)
         self._connected = True
 
