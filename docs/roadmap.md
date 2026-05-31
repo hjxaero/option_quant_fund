@@ -2,7 +2,7 @@
 
 ## Current Phase: MVP 0.1 — Data Platform Migration
 
-**Active task:** TASK-005 — Legacy data platform review and migration plan (Control Lane).
+**Active task:** TASK-006 — `data_store` directory structure and data contracts (Control Lane).
 
 **Completed:**
 
@@ -12,33 +12,38 @@
 | TASK-002 | Sample schema / data loader |
 | TASK-003 | Option chain Fast Lane prototype |
 | TASK-004 | Formal option chain builder |
+| TASK-005 | Legacy platform review & migration plan docs |
 
 ---
 
-## Data Migration Track (TASK-005+)
+## Data Migration Track
 
-| Task | Focus | Real data? |
-|------|--------|------------|
-| **TASK-005** | Review legacy platform; migration & store design docs | No |
-| **TASK-006** | `data_store` layout, data contracts, `.gitignore` | No |
-| **TASK-007** | TqSdk source adapter skeleton (no CI network) | No |
-| **TASK-008** | Single-contract MO minute quote download MVP | Yes (minimal) |
-| **TASK-009** | First real MO minute sample batch + quality report | Yes |
-| **TASK-010** | Re-review schema & option_chain on real samples | Yes |
+| Task | Focus | Real data? | Status |
+|------|--------|------------|--------|
+| TASK-005 | Legacy review; initial store design docs | No | Done |
+| **TASK-006** | Formal `data_store` layout + field contracts + `.gitignore` | No | **Current** |
+| **TASK-007** | TqSdk source adapter skeleton (offline tests; env-var auth) | No | Next |
+| **TASK-008** | Single-contract MO minute quote download MVP | Yes (minimal) | Planned |
+| TASK-009 | First real MO sample batch + quality report | Yes | Planned |
+| TASK-010 | Re-review schema & option_chain on real samples | Yes | Planned |
+
+### TASK-007 preview
+
+- Define `src/.../data/sources/tq/` adapter interface
+- Env-var credentials only (`TQ_USER`, `TQ_PASS`)
+- **No** live TqSdk calls in default `pytest`
+
+### TASK-008 preview
+
+- First parquet under `data_store/quotes/minute/MO/{symbol}/{trade_date}.parquet`
+- Atomic write + `.state.json` sidecar
+- **No** four-term batch yet
 
 ---
 
 ## Greeks / Backtest Gate
 
-**Do not start formal Greeks module until TASK-009 and TASK-010 complete.**
-
-Rationale (from legacy review):
-
-- IV/Greeks require validated minute order-book quotes and mark price rules
-- Sample CSV alone is insufficient for production IV
-- Option chain must be re-validated on real MO parquet before Greeks
-
-Planned after data track:
+**Do not start formal Greeks until TASK-009 and TASK-010 complete.**
 
 | Future area | Depends on |
 |-------------|------------|
@@ -52,15 +57,17 @@ Planned after data track:
 
 - Research and backtest first; **no live trading** in MVP
 - Control Lane: GitHub Issue → Cursor → Review
-- Fast Lane: `experiments/`, `notebooks/` — disposable prototypes
 - `data_store/` real data stays **local**, not in git
-- Credentials via **environment variables only** (`TQ_USER`, `TQ_PASS`)
+- Credentials via **environment variables only**
 
 ---
 
-## Legacy Reference
+## Reference Docs
 
-Source: [Option_System_Research](https://github.com/hjxaero/Option_System_Research)
-
-- Review: [legacy_data_platform_review.md](legacy_data_platform_review.md)
-- Plan: [data_migration_plan.md](data_migration_plan.md)
+| Doc | Purpose |
+|-----|---------|
+| [legacy_data_platform_review.md](legacy_data_platform_review.md) | TASK-005 legacy assessment |
+| [data_migration_plan.md](data_migration_plan.md) | Stage 0–6 migration plan |
+| [data_store_design.md](data_store_design.md) | TASK-006 directory contract |
+| [data_dictionary.md](data_dictionary.md) | Field-level contracts |
+| [tqsdk_data_source_plan.md](tqsdk_data_source_plan.md) | TqSdk plan (no code until TASK-007) |
