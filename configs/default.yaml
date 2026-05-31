@@ -1,0 +1,19 @@
+# Placeholder configuration for MVP 0.1 (TASK-001).
+# No production settings, broker endpoints, or account credentials.
+
+project:
+  name: option_quant_fund
+  version: "0.1.0"
+  lane: control
+
+paths:
+  data_raw: data/raw
+  data_processed: data/processed
+  data_sample: data/sample
+
+modules:
+  - data
+  - option_chain
+  - greeks
+  - backtest
+  - risk
