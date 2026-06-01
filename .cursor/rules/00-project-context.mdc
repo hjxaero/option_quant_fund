@@ -1,0 +1,38 @@
+---
+description: Project context and current MVP phase for option_quant_fund
+alwaysApply: true
+---
+
+# Project context
+
+## Repository
+
+- Project name: option_quant_fund
+- Phase: MVP 0.1 - Data Platform Migration
+- Primary goal: land foundational market data contracts and storage layout
+
+## Out of scope for now
+
+- Formal Greeks production pipelines
+- Backtest engine implementation
+- Strategy execution logic
+- Live trading
+
+## Workflow actors
+
+- CEO sets priorities
+- CTO Agent defines tasks and boundaries
+- Cursor implements within Issue scope
+- GitHub is the system of record
+
+## Source of truth
+
+- GitHub Issues define allowed work and file scope
+- Pull requests document what changed and why
+- Docs under docs/ define data contracts and platform rules
+
+## Current focus
+
+- data/ sample fixtures for CI
+- data_store/ layout and contracts (local real data only)
+- Control Lane tasks via Issue -> branch -> PR -> review
