@@ -1,32 +1,32 @@
----
-description: Project identity, phase, and source-of-truth workflow context
-alwaysApply: true
----
+# Project Context
 
-# Project context
+This repository is option_quant_fund.
 
-## Identity and phase
+The project is an options quant research and data platform.
 
-- Repository: option_quant_fund
-- Phase: MVP 0.1 - Data Platform Migration
-- Main objective: data contracts and storage layout foundation
+Current phase:
+MVP 0.1 Data Platform Migration.
 
-## Not in scope now
+Current priority:
+Foundational data landing comes before Greeks, backtest, and strategies.
 
-- Formal Greeks production pipeline
-- Backtest engine implementation
-- Strategy execution logic
-- Live trading features
+Main workflow:
+CEO plus CTO Agent plus Cursor plus GitHub.
 
-## Workflow actors
+GitHub Issues and Pull Requests are the formal source of truth.
 
-- CEO sets priorities
-- CTO Agent defines task boundaries
-- Cursor implements inside Issue scope
-- GitHub is the official system of record
+Cursor must follow the current GitHub Issue.
 
-## Source of truth
+Cursor must not expand task scope.
 
-- GitHub Issue defines allowed files and boundaries
-- Pull request records implementation and validation
-- docs/ contains contract and platform documentation
+Cursor must not implement live trading.
+
+Cursor must not implement broker integration.
+
+Cursor must not implement order placement.
+
+Cursor must not implement OMS or EMS.
+
+Cursor must not implement Portfolio Risk Brain.
+
+When in doubt, stop and ask for clarification.

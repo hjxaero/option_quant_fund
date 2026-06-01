@@ -1,34 +1,35 @@
----
-description: Multiline Python and Markdown quality with Unicode safety
-globs: "**/*.{py,md,mdc}"
-alwaysApply: false
----
+# Python and Text Quality
 
-# Python and Markdown quality
+All Python files must be normal multi-line source files.
 
-These rules prevent compressed files and hidden character warnings.
+Do not write compressed single-line Python files.
 
-## Python formatting
+Each import should be on a normal line.
 
-- Python files must be normal multiline source code
-- Never write a whole Python module as one line
-- import, class, function, and method blocks must use normal newlines
-- Use clear indentation and readable spacing
-- Keep line length reasonable, target less than 140 characters
+Each class should use normal indentation.
 
-## Markdown and MDC formatting
+Each function should use normal indentation.
 
-- Markdown and MDC files must be multiline text
-- Never compress a document into one line
-- Prefer plain ASCII punctuation in rules and docs
+Each method should use normal indentation.
 
-## Hidden and bidi Unicode
+Do not put an entire module on one line.
 
-- Do not add hidden or bidirectional Unicode characters
-- Avoid zero-width and direction override characters
-- Use plain UTF-8 text with visible characters
+Markdown files must also be normal multi-line text.
 
-## Validation after Python edits
+Do not compress Markdown into one long line.
 
-- Run python -m pytest
-- Resolve failures before commit and PR update
+Do not introduce hidden Unicode characters.
+
+Do not introduce bidirectional Unicode control characters.
+
+Avoid special arrows and unusual invisible characters.
+
+Prefer plain ASCII punctuation in rules and code.
+
+Keep line length reasonable.
+
+Target maximum line length is below 140 characters.
+
+After editing Python files, run python -m pytest.
+
+Before submitting, check that edited files have reasonable line counts.

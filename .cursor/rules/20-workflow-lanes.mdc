@@ -1,31 +1,33 @@
----
-description: Fast Lane versus Control Lane execution rules
-alwaysApply: true
----
+# Workflow Lanes
 
-# Workflow lanes
+The project uses two workflow lanes.
 
-## Fast Lane
+Fast Lane is for experiments.
 
-Fast Lane is limited to experiments/ and notebooks/.
+Fast Lane code belongs only in experiments or notebooks.
 
-- Purpose: prototypes and disposable research
-- Allowed: quick scripts and exploratory notebooks
-- Forbidden: editing src/ production modules
-- Forbidden: changing formal data contracts without a Control Lane Issue
+Fast Lane is for prototypes, disposable research, and quick validation.
 
-## Control Lane
+Fast Lane must not modify formal src modules.
 
-Control Lane is for formal code, docs, and contracts.
+Fast Lane must not introduce live trading.
 
-- Every task starts from a GitHub Issue
-- Edit only files listed in Allowed Files
-- Do not touch any Forbidden Scope item
-- Run python -m pytest when Python files change
-- Open a PR with scope and test notes
+Fast Lane must not introduce credentials.
 
-## Discipline
+Control Lane is for formal work.
 
-- Read the full Issue before writing code
-- Do not expand beyond requested scope
-- Do not continue closed or superseded PR tracks
+Control Lane requires a GitHub Issue.
+
+Control Lane requires explicit Allowed Files.
+
+Control Lane requires explicit Forbidden Scope.
+
+Cursor must only modify files listed in Allowed Files.
+
+Cursor must not modify Forbidden Scope.
+
+Pull Requests must describe what was changed.
+
+Pull Requests must mention whether tests passed.
+
+When the issue is unclear, do not guess. Ask for clarification.

@@ -1,29 +1,31 @@
----
-description: Manual content mode when full file payload is provided
-alwaysApply: true
----
-
 # Manual Content Mode
 
-When CTO provides full file content, Cursor must follow strict write behavior.
+Manual Content Mode applies when CTO provides exact file contents.
 
-## Required write behavior
+When Manual Content Mode is active, do not rewrite the content.
 
-- Write to the exact file path provided
-- Overwrite the file with supplied content
-- Preserve original newlines and line breaks
-- Do not paraphrase or summarize supplied content
-- Do not collapse multiple lines into one line
-- Do not optimize or refactor unless explicitly requested
+Do not summarize the content.
 
-## Forbidden behavior
+Do not optimize the content.
 
-- Do not merge partial edits when full file content was supplied
-- Do not convert Python, Markdown, or MDC into single-line format
-- Do not drop blank lines that appear in supplied content
+Do not compress the content.
 
-## After writing
+Do not merge lines together.
 
-- Run required format checks when specified by task
-- Run python -m pytest when Python files changed
-- Report written paths and test outcomes
+Do not convert files into single-line content.
+
+Write the provided content exactly to the specified path.
+
+Preserve line breaks.
+
+Preserve indentation.
+
+Preserve normal Markdown formatting.
+
+Preserve normal Python formatting.
+
+After writing files, run the requested validation commands.
+
+If validation fails, report the failure instead of guessing a fix.
+
+Manual Content Mode is used to prevent file format corruption.

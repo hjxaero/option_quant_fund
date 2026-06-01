@@ -1,33 +1,35 @@
----
-description: Hard safety limits for trading, secrets, and licensed data
-alwaysApply: true
----
+# Safety Boundaries
 
-# Safety boundaries
+These rules always apply.
 
-Cursor must never create or modify:
+Never create or modify live trading interfaces.
 
-- Live trading interfaces
-- Broker APIs
-- Auto order placement logic
-- OMS or EMS systems
-- Portfolio Risk Brain
-- Real account configuration files
-- API keys
-- Tokens
-- Secrets
-- Production credentials
+Never create or modify broker APIs.
 
-## Never commit
+Never create or modify automatic order placement logic.
 
-- .env files
-- credentials.json
-- secrets/ directories
-- data_store real market data files
-- Large licensed market data files
+Never create or modify OMS or EMS logic.
 
-## Data handling policy
+Never create or modify Portfolio Risk Brain logic.
 
-- Use environment variables for credentials only when an Issue allows it
-- Keep licensed market data local and out of git history
-- Prefer docs and contracts over ad hoc local data dumps
+Never create real account configuration files.
+
+Never write API keys, tokens, passwords, or secrets.
+
+Never commit .env files.
+
+Never commit credentials.json.
+
+Never commit secrets directories.
+
+Never commit real data_store market data.
+
+Never commit large licensed market data files.
+
+Never add production credentials to docs, tests, configs, or source code.
+
+If a task appears to require credentials, create a safe placeholder and document that real values must come from environment variables.
+
+Default tests must not require real credentials.
+
+Default tests must not make live network calls.

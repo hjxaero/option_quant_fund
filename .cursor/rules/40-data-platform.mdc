@@ -1,35 +1,33 @@
----
-description: Data platform storage boundaries and commit policy
-globs: "data/**,data_store/**,docs/data*.md"
-alwaysApply: false
----
+# Data Platform Rules
 
-# Data platform boundary
+data/sample may contain small simulated CSV fixtures.
 
-## data/ usage
+data/sample files may be committed to GitHub.
 
-- data/sample/ may contain small simulated CSV fixtures
-- data/raw/ is staging and should not store committed real payloads
-- data/processed/ is intermediate output and is not for large commits
-- data/external/ is reference material and should be gitignored by default
+data_store is for local real market data.
 
-## data_store/ usage
+data_store real market data must not be committed to GitHub.
 
-- data_store/ is for local real market data
-- Do not commit real parquet, csv, or json market data files
-- Keep only placeholder files like .gitkeep in git when needed
+data/raw is a local staging layer.
 
-## Expected real minute path
+data/processed is a local normalized output layer.
 
-- data_store/quotes/minute/MO/{symbol}/{trade_date}.parquet
+data/external is a local external reference layer.
 
-## Downloader boundary
+data/raw, data/processed, and data/external should not contain committed real or licensed data.
 
-- Do not implement downloader logic unless current Issue explicitly allows it
-- Do not keep downloader output as permanent files under data/raw/
+Future real MO market data should land under data_store.
 
-## Reference docs
+The main future minute quote path is:
+data_store/quotes/minute/MO/{symbol}/{trade_date}.parquet
 
-- docs/data_store_design.md
-- docs/data_dictionary.md
-- data/README.md
+Quality state should be stored under:
+data_store/quality/MO/{symbol}/{trade_date}.state.json
+
+Do not implement data downloaders unless the current GitHub Issue explicitly allows it.
+
+Do not create real parquet market data unless the current GitHub Issue explicitly allows it.
+
+Do not commit large market data files.
+
+Do not commit licensed market data.

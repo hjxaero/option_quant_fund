@@ -1,35 +1,33 @@
----
-description: TqSdk credential, testing, and connection boundaries
-globs: "src/option_quant_fund/data/sources/**,docs/tqsdk*.md"
-alwaysApply: false
----
+# TqSdk Boundary
 
-# TqSdk boundary
+TqSdk credentials must only come from environment variables.
 
-## Credential policy
+Allowed environment variable names are TQ_USER and TQ_PASS.
 
-- Allowed credential environment variables: TQ_USER and TQ_PASS
-- Never hardcode usernames, passwords, tokens, or API keys
-- Never write real credentials into source, tests, docs, or rules
+Never hardcode TqSdk credentials.
 
-## Test policy
+Never write real TQ_USER values into the repository.
 
-- Default pytest must not require a real TqSdk account
-- Default pytest must not perform live network requests
-- Use monkeypatch, fake env, or stubs in unit tests
+Never write real TQ_PASS values into the repository.
 
-## Live API boundary
+Default tests must not require real TqSdk credentials.
 
-- Do not import or instantiate real TqApi unless an Issue explicitly allows it
-- Keep connect behavior opt-in and offline-first in skeleton tasks
+Default tests must not make live TqSdk calls.
 
-## Scope through TASK-007
+Default tests must not make live network calls.
 
-- Skeleton and config wiring only
-- Fake tests only
-- No downloader implementation
+Do not import or instantiate real TqApi unless the current GitHub Issue explicitly allows it.
 
-## References
+Do not implement a TqSdk downloader unless the current GitHub Issue explicitly allows it.
 
-- docs/tqsdk_data_source_plan.md
-- docs/roadmap.md
+TASK-007 only allows a source adapter skeleton.
+
+TASK-007 does not allow live connection.
+
+TASK-007 does not allow downloader implementation.
+
+TASK-007 does not allow real data download.
+
+Use fake environment variables in tests.
+
+Use optional dependency guards when needed.
