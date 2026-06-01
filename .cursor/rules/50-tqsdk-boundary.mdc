@@ -1,33 +1,33 @@
 ---
-description: TqSdk credential and connection boundaries
+description: TqSdk credential, testing, and connection boundaries
 globs: "src/option_quant_fund/data/sources/**,docs/tqsdk*.md"
 alwaysApply: false
 ---
 
 # TqSdk boundary
 
-## Credentials
+## Credential policy
 
-- Only environment variable names: TQ_USER and TQ_PASS
+- Allowed credential environment variables: TQ_USER and TQ_PASS
 - Never hardcode usernames, passwords, tokens, or API keys
 - Never write real credentials into source, tests, docs, or rules
 
-## Default test behavior
+## Test policy
 
 - Default pytest must not require a real TqSdk account
-- Default pytest must not perform network calls to Tianqin
-- Use monkeypatch, fake env, or stubbed tqsdk modules in unit tests
+- Default pytest must not perform live network requests
+- Use monkeypatch, fake env, or stubs in unit tests
 
-## Live connection
+## Live API boundary
 
-- Do not import or instantiate real TqApi unless the Issue explicitly allows it
-- connect() style APIs must remain opt-in and offline-first in skeleton tasks
+- Do not import or instantiate real TqApi unless an Issue explicitly allows it
+- Keep connect behavior opt-in and offline-first in skeleton tasks
 
-## Task boundaries (through TASK-007)
+## Scope through TASK-007
 
-- Adapter skeleton and config wiring only
-- Fake env tests and mocked tqsdk only
-- No downloader until a later Issue permits it
+- Skeleton and config wiring only
+- Fake tests only
+- No downloader implementation
 
 ## References
 

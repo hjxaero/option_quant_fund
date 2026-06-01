@@ -1,5 +1,5 @@
 ---
-description: Safety boundaries - never create trading, secrets, or licensed data in git
+description: Hard safety limits for trading, secrets, and licensed data
 alwaysApply: true
 ---
 
@@ -9,10 +9,10 @@ Cursor must never create or modify:
 
 - Live trading interfaces
 - Broker APIs
-- Auto order placement
+- Auto order placement logic
 - OMS or EMS systems
 - Portfolio Risk Brain
-- Real account configs
+- Real account configuration files
 - API keys
 - Tokens
 - Secrets
@@ -24,10 +24,10 @@ Cursor must never create or modify:
 - credentials.json
 - secrets/ directories
 - data_store real market data files
-- Large licensed market data corpora
+- Large licensed market data files
 
-## Data handling
+## Data handling policy
 
-- Use environment variables for credentials when an Issue explicitly allows TqSdk
-- Keep licensed or restricted market data local only
-- Prefer docs and contracts over ad hoc data dumps in the repository
+- Use environment variables for credentials only when an Issue allows it
+- Keep licensed market data local and out of git history
+- Prefer docs and contracts over ad hoc local data dumps

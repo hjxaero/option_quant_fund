@@ -1,36 +1,34 @@
 ---
-description: Python and Markdown file formatting quality (multiline, ASCII-safe)
+description: Multiline Python and Markdown quality with Unicode safety
 globs: "**/*.{py,md,mdc}"
 alwaysApply: false
 ---
 
-# Python and text file quality
+# Python and Markdown quality
 
-These rules prevent compressed single-line files and Unicode warnings on GitHub.
+These rules prevent compressed files and hidden character warnings.
 
-## Python source
+## Python formatting
 
-- Write normal multiline Python source files
-- Never write an entire module on one line
-- Each import statement on its own line (or a clear parenthesized group)
-- Each class, function, and method uses normal newlines and indentation
-- Keep lines reasonably short; target max line length under 140 characters
+- Python files must be normal multiline source code
+- Never write a whole Python module as one line
+- import, class, function, and method blocks must use normal newlines
+- Use clear indentation and readable spacing
+- Keep line length reasonable, target less than 140 characters
 
-## Markdown and MDC
+## Markdown and MDC formatting
 
-- Use normal multiline Markdown
-- Never compress a whole document into one line
-- Use ASCII punctuation in project rules and docs when possible
-  - Prefer hyphen-minus (-) over em dash
-  - Prefer -> over Unicode arrows
+- Markdown and MDC files must be multiline text
+- Never compress a document into one line
+- Prefer plain ASCII punctuation in rules and docs
 
-## Unicode
+## Hidden and bidi Unicode
 
-- Do not introduce hidden or bidirectional Unicode characters
-- Avoid zero-width spaces and direction override characters
-- Prefer UTF-8 plain text with visible ASCII where sufficient
+- Do not add hidden or bidirectional Unicode characters
+- Avoid zero-width and direction override characters
+- Use plain UTF-8 text with visible characters
 
-## After Python edits
+## Validation after Python edits
 
-- Run: python -m pytest
-- Fix failures before opening or updating a PR
+- Run python -m pytest
+- Resolve failures before commit and PR update

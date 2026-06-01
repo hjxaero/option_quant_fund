@@ -1,35 +1,34 @@
 ---
-description: data/ vs data_store/ layout and git policy
+description: Data platform storage boundaries and commit policy
 globs: "data/**,data_store/**,docs/data*.md"
 alwaysApply: false
 ---
 
-# Data platform boundaries
+# Data platform boundary
 
-## data/ (lightweight)
+## data/ usage
 
-- data/sample/: small simulated CSV fixtures; safe for git and CI
-- data/raw/: staging imports; do not commit real or licensed payloads
-- data/processed/: intermediate exports; do not commit large corpora
-- data/external/: reference tables; default is gitignored
+- data/sample/ may contain small simulated CSV fixtures
+- data/raw/ is staging and should not store committed real payloads
+- data/processed/ is intermediate output and is not for large commits
+- data/external/ is reference material and should be gitignored by default
 
-## data_store/ (authoritative local corpus)
+## data_store/ usage
 
-- Real MO historical data lives here on disk only
-- Do not commit parquet, csv, or json market data to GitHub
-- Keep data_store/.gitkeep if the directory must exist in git
+- data_store/ is for local real market data
+- Do not commit real parquet, csv, or json market data files
+- Keep only placeholder files like .gitkeep in git when needed
 
-## Target layout for real minute quotes
+## Expected real minute path
 
 - data_store/quotes/minute/MO/{symbol}/{trade_date}.parquet
-- Quality sidecars under data_store/quality/
 
-## Downloader policy
+## Downloader boundary
 
-- Do not implement downloaders unless the current Issue explicitly allows it
-- Downloader output must not remain permanently under data/raw/
+- Do not implement downloader logic unless current Issue explicitly allows it
+- Do not keep downloader output as permanent files under data/raw/
 
-## References
+## Reference docs
 
 - docs/data_store_design.md
 - docs/data_dictionary.md
