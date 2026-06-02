@@ -1,0 +1,35 @@
+# Safety Boundaries
+
+These rules always apply.
+
+Never create or modify live trading interfaces.
+
+Never create or modify broker APIs.
+
+Never create or modify automatic order placement logic.
+
+Never create or modify OMS or EMS logic.
+
+Never create or modify Portfolio Risk Brain logic.
+
+Never create real account configuration files.
+
+Never write API keys, tokens, passwords, or secrets.
+
+Never commit .env files.
+
+Never commit credentials.json.
+
+Never commit secrets directories.
+
+Never commit real data_store market data.
+
+Never commit large licensed market data files.
+
+Never add production credentials to docs, tests, configs, or source code.
+
+If a task appears to require credentials, create a safe placeholder and document that real values must come from environment variables.
+
+Default tests must not require real credentials.
+
+Default tests must not make live network calls.

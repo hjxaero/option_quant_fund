@@ -1,0 +1,32 @@
+# Project Context
+
+This repository is option_quant_fund.
+
+The project is an options quant research and data platform.
+
+Current phase:
+MVP 0.1 Data Platform Migration.
+
+Current priority:
+Foundational data landing comes before Greeks, backtest, and strategies.
+
+Main workflow:
+CEO plus CTO Agent plus Cursor plus GitHub.
+
+GitHub Issues and Pull Requests are the formal source of truth.
+
+Cursor must follow the current GitHub Issue.
+
+Cursor must not expand task scope.
+
+Cursor must not implement live trading.
+
+Cursor must not implement broker integration.
+
+Cursor must not implement order placement.
+
+Cursor must not implement OMS or EMS.
+
+Cursor must not implement Portfolio Risk Brain.
+
+When in doubt, stop and ask for clarification.

@@ -1,0 +1,31 @@
+# Manual Content Mode
+
+Manual Content Mode applies when CTO provides exact file contents.
+
+When Manual Content Mode is active, do not rewrite the content.
+
+Do not summarize the content.
+
+Do not optimize the content.
+
+Do not compress the content.
+
+Do not merge lines together.
+
+Do not convert files into single-line content.
+
+Write the provided content exactly to the specified path.
+
+Preserve line breaks.
+
+Preserve indentation.
+
+Preserve normal Markdown formatting.
+
+Preserve normal Python formatting.
+
+After writing files, run the requested validation commands.
+
+If validation fails, report the failure instead of guessing a fix.
+
+Manual Content Mode is used to prevent file format corruption.

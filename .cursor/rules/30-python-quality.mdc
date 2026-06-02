@@ -1,0 +1,35 @@
+# Python and Text Quality
+
+All Python files must be normal multi-line source files.
+
+Do not write compressed single-line Python files.
+
+Each import should be on a normal line.
+
+Each class should use normal indentation.
+
+Each function should use normal indentation.
+
+Each method should use normal indentation.
+
+Do not put an entire module on one line.
+
+Markdown files must also be normal multi-line text.
+
+Do not compress Markdown into one long line.
+
+Do not introduce hidden Unicode characters.
+
+Do not introduce bidirectional Unicode control characters.
+
+Avoid special arrows and unusual invisible characters.
+
+Prefer plain ASCII punctuation in rules and code.
+
+Keep line length reasonable.
+
+Target maximum line length is below 140 characters.
+
+After editing Python files, run python -m pytest.
+
+Before submitting, check that edited files have reasonable line counts.

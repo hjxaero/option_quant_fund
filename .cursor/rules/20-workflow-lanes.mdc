@@ -1,0 +1,33 @@
+# Workflow Lanes
+
+The project uses two workflow lanes.
+
+Fast Lane is for experiments.
+
+Fast Lane code belongs only in experiments or notebooks.
+
+Fast Lane is for prototypes, disposable research, and quick validation.
+
+Fast Lane must not modify formal src modules.
+
+Fast Lane must not introduce live trading.
+
+Fast Lane must not introduce credentials.
+
+Control Lane is for formal work.
+
+Control Lane requires a GitHub Issue.
+
+Control Lane requires explicit Allowed Files.
+
+Control Lane requires explicit Forbidden Scope.
+
+Cursor must only modify files listed in Allowed Files.
+
+Cursor must not modify Forbidden Scope.
+
+Pull Requests must describe what was changed.
+
+Pull Requests must mention whether tests passed.
+
+When the issue is unclear, do not guess. Ask for clarification.

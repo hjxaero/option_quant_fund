@@ -1,0 +1,33 @@
+# Data Platform Rules
+
+data/sample may contain small simulated CSV fixtures.
+
+data/sample files may be committed to GitHub.
+
+data_store is for local real market data.
+
+data_store real market data must not be committed to GitHub.
+
+data/raw is a local staging layer.
+
+data/processed is a local normalized output layer.
+
+data/external is a local external reference layer.
+
+data/raw, data/processed, and data/external should not contain committed real or licensed data.
+
+Future real MO market data should land under data_store.
+
+The main future minute quote path is:
+data_store/quotes/minute/MO/{symbol}/{trade_date}.parquet
+
+Quality state should be stored under:
+data_store/quality/MO/{symbol}/{trade_date}.state.json
+
+Do not implement data downloaders unless the current GitHub Issue explicitly allows it.
+
+Do not create real parquet market data unless the current GitHub Issue explicitly allows it.
+
+Do not commit large market data files.
+
+Do not commit licensed market data.

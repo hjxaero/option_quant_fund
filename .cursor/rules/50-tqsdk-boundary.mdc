@@ -1,0 +1,33 @@
+# TqSdk Boundary
+
+TqSdk credentials must only come from environment variables.
+
+Allowed environment variable names are TQ_USER and TQ_PASS.
+
+Never hardcode TqSdk credentials.
+
+Never write real TQ_USER values into the repository.
+
+Never write real TQ_PASS values into the repository.
+
+Default tests must not require real TqSdk credentials.
+
+Default tests must not make live TqSdk calls.
+
+Default tests must not make live network calls.
+
+Do not import or instantiate real TqApi unless the current GitHub Issue explicitly allows it.
+
+Do not implement a TqSdk downloader unless the current GitHub Issue explicitly allows it.
+
+TASK-007 only allows a source adapter skeleton.
+
+TASK-007 does not allow live connection.
+
+TASK-007 does not allow downloader implementation.
+
+TASK-007 does not allow real data download.
+
+Use fake environment variables in tests.
+
+Use optional dependency guards when needed.
